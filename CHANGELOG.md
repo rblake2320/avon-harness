@@ -19,6 +19,28 @@ See `ROADMAP.md`.
 
 ---
 
+## [1.2.0] — 2026-06-24
+
+Revenue infrastructure (shared with MK Copilot 1.3.0). Stripe billing, annual-first,
+90-day trial, referral flywheel.
+
+### Added
+- **Stripe billing via REST (`app/billing.py`)** — httpx, no SDK; HMAC-SHA256 webhook
+  verification.
+- **Billing routes**: `POST /api/billing/checkout`, `GET /api/billing/me`,
+  `GET /api/billing/plans`, `POST /api/billing/portal`, `POST /api/billing/webhook`.
+- **Subscription model** mirroring Stripe state, webhook-driven.
+- **Referral program** — `referral_code` per user, signup `?ref=`, $5 credit on the
+  referred user's first paid invoice (`ReferralCredit`, idempotent).
+- **Entitlement gate (`app/entitlements.py`)** — off until `BILLING_ENFORCED=1`.
+- **Config** — `STRIPE_SECRET_KEY/WEBHOOK_SECRET/PRICES`, `BILLING_*`, `REFERRAL_CREDIT_CENTS`.
+  Avon tiers: solo / leader / studio. All from env.
+
+### Tests
+- 52 → 59. Same billing coverage as MK (plans test asserts Avon's `leader` tier).
+
+---
+
 ## [1.1.0] — 2026-06-24
 
 Customer skin-data privacy core (shared with MK Copilot 1.2.0). Closes the launch-blocking

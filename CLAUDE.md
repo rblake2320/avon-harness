@@ -85,12 +85,21 @@ Same as MK Harness, plus:
 |----------|-------|
 | `DEFAULT_BRAND` | Set to `avon` — already default in config.py |
 | `SKIN_ANALYSIS_URL` | `http://localhost:8101` if local PanDerm is running |
+| `STRIPE_SECRET_KEY` | `sk_live_…`/`sk_test_…`; empty = billing routes 503 |
+| `STRIPE_WEBHOOK_SECRET` | `whsec_…`; verifies inbound webhook signatures |
+| `STRIPE_PRICES` | JSON map `{"tier:interval":"price_…"}` — Avon tiers solo/leader/studio |
+| `BILLING_TRIAL_DAYS` | Default 90 |
+| `BILLING_ENFORCED` | Default false; true → AI features require active sub (402) |
+| `REFERRAL_CREDIT_CENTS` | Default 500 ($5 per referred conversion) |
+
+Stripe is called over REST via httpx (no SDK). Create Prices in the dashboard, supply IDs
+via `STRIPE_PRICES`, point a webhook at `POST /api/billing/webhook`. Secrets in env only.
 
 ---
 
 ## Testing
 
-Run `python -m pytest -v` — all 52 tests must pass.
+Run `python -m pytest -v` — all 59 tests must pass.
 The test suite uses `avon` brand config for brand-related tests (update conftest
 `DEFAULT_BRAND` env var if needed for brand-specific test cases).
 

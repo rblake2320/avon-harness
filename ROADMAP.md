@@ -14,8 +14,10 @@ acquisition, Leader-tier leverage) and by `ConsultantProfile` analytics once rep
 - [ ] **Campaign-aware coaching.** The sales coach skill calculates "you need $X more this
       campaign to hit the next commission tier (or the $40 floor)." Requires a lightweight
       per-rep campaign-total input. No other tool does this.
-- [ ] **Billing & subscription tiers.** Stripe — Solo / Leader / Studio. Annual default.
-      Bundle discount for reps who also run MK Copilot.
+- [x] **Billing & subscription tiers.** Shipped v1.2.0 — Stripe Checkout (annual-first,
+      90-day trial), `Subscription` + webhook lifecycle, portal, referral-credit flywheel.
+      Set `STRIPE_PRICES` (solo/leader/studio) + keys to go live. Bundle discount for
+      dual-brand reps is still a future pricing item.
 - [x] **Consent capture + deletion/export + photo retention.** Shipped v1.1.0 —
       `ConsentRecord` + `/api/consent/skin` (operator + per-customer gate before photo read),
       `DELETE /api/me/skin-data` (purge + receipt), `GET /api/me/skin-data/export`, and
