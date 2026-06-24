@@ -18,6 +18,12 @@ acquisition, Leader-tier leverage) and by `ConsultantProfile` analytics once rep
       Bundle discount for reps who also run MK Copilot.
 - [ ] **Data deletion / export endpoints** + photo retention enforcement
       (see SECURITY-PRIVACY.md). Required before scaled customer-data handling.
+- [ ] **Usage-metering dashboard.** Token cost per rep/team, visible to tenant admins.
+- [ ] **Redis rate limiting.** Swap in-process store (`ratelimit.py`) for multi-replica.
+- [ ] **Mobile device test.** Expo EAS, real iOS + Android — camera skin flow never run on device.
+
+> See `MONSTER-MOVE.md` for the scale-up/exit thesis and 90-day sprint. Two items there
+> (repo merge, provisional patent) are **open decisions** — not scheduled work.
 
 ## Next (1.2.0 – 1.3.0)
 
