@@ -1,19 +1,27 @@
 """Avon brand configuration — The Avon Company (US entity, LG H&H owned).
 
-IMPORTANT: Avon uses campaign-based pricing (new brochure every ~2 weeks).
-There is NO fixed public price list. The AI must NEVER quote specific prices.
-Always direct reps to check the current campaign brochure or AvonNow back office.
+Last verified: June 24, 2026. Update this header whenever facts are re-verified.
 
-Target: US reps under The Avon Company (LG H&H) — NOT Avon International
-(sold to Regent LP Dec 2025 for £1). The US entity is operationally stable.
+ENTITY STRUCTURE (current as of June 2026):
+  The Avon Company   — US/Canada/Puerto Rico — owned by LG H&H (Korean beauty co.)
+                       OPERATIONALLY STABLE. North America +35% Q1 2026.
+                       New CEO Lee Sun-ju (ex-L'Oreal, appointed Sept 2025).
+                       This is the entity our reps belong to.
+  Avon International — Europe/Africa/Asia — sold to Regent LP, Dec 31 2025 for £1.
+                       Still operating as of June 2026; strategy opaque.
+                       $25M Natura credit line expires Dec 2026 — first pressure point.
+  Avon Latin America — Retained by Natura&Co. Strong growth (Brazil +5%).
+  Avon Russia        — Sold to Arnest Group ~€26.9M, Feb 2026.
+  Avon Products Inc. — The bankrupt US parent. LIQUIDATION TRUST effective Oct 7, 2025.
+                       No longer a business. US entity (LG H&H) was never part of it.
 
-FTC note: Avon does not publish an official US Income Disclosure Statement.
-All income framing must use the universal FTC filter + Avon-specific guidance below.
+PRICING: Campaign-based (~every 2 weeks). NO fixed price list. Never quote prices.
 
-Compensation (2025 structure):
-- Base: 25% commission on orders $40+
-- Volume tiers up to 50% per campaign for high-volume sellers
-- Four streams: personal sales, leadership bonuses, fundraising, team bonuses
+ANELE: Avon's own built-in AI assistant in the Avon ON app (v3.1.3, Mar 2026).
+  Known to be broken — login errors, argues with users, broken social sharing.
+  3.96/5 from 26,000 reviews. We are better than this. Do not mention Anele.
+
+FTC: No official US Income Disclosure Statement published by Avon.
 """
 from .base import BrandConfig
 
@@ -21,57 +29,72 @@ AVON = BrandConfig(
     name="avon",
     display_name="Avon",
     assistant_voice=(
-        "You are a professional assistant for Avon Representatives with The Avon Company. "
-        "The Avon Company is the US entity owned by LG H&H — it is operationally stable "
-        "and separate from any international restructuring."
+        "You are a professional assistant for Avon Representatives with The Avon Company "
+        "(US entity, owned by LG H&H). The US business is separate from any international "
+        "Avon entities and is fully operational."
     ),
     price_facts="""
-AVON PRICING POLICY — CRITICAL: Avon uses campaign-based pricing. A new brochure
-launches approximately every 2 weeks and prices change with every campaign.
-NEVER quote specific prices. Always tell the representative:
-  "Please check the current campaign brochure on AvonNow or the Avon ON app
-   for today's pricing — it changes every campaign."
+AVON PRICING — CRITICAL RULE: Avon uses campaign-based pricing. Brochure prices
+change every campaign (~2 weeks). NEVER quote specific prices under any circumstances.
+Always direct the rep to: "Check the current campaign brochure on AvonNow or the
+Avon ON app — prices change every campaign."
 
-AVON PRODUCT LINES (for education, not pricing):
+AVON PRODUCT LINES (education only — no prices):
 Skincare:
-  Anew (flagship skincare):
-    - Anew Ultimate: Anti-aging, targets multiple signs of aging
-    - Anew Vitamin C: Brightening, dark spots, glow
-    - Anew Clinical: Advanced treatments (fillers, peels, retexturizers)
-    - Anew Platinum: Formulated for 70+ skin
-    - Anew Reversalist: Renewal and repair focus
-  Skin So Soft: Iconic since 1961. Bath oil, Bug Guard, body lotions.
-    Bug Guard is the #1 selling product line — especially in spring/summer.
-  Hydra Fusion: Hyaluronic acid hydration line
-  Clearskin: Acne-focused line
+  Anew (flagship line — lead with this):
+    Anew Ultimate     — Multi-performance anti-aging, retinol
+    Anew Vitamin C    — Brightening, dark spots, luminosity
+    Anew Clinical     — Advanced treatments: peels, gap fillers, retexturizers
+    Anew Platinum     — Designed for 70+ skin, lifting and firming
+    Anew Reversalist  — Cell renewal and repair
+  Skin So Soft       — Iconic since 1961. Bath oil, Bug Guard, body lotions.
+    Bug Guard is the highest-volume product seasonally (spring/summer).
+    Lead with Bug Guard for outdoor lifestyle customers.
+  Hydra Fusion       — Hyaluronic acid hydration line
+  Clearskin          — Acne and oily skin concern line
+  AVON CHI ESSENTIALS — Haircare line, launched late 2025 (newer addition)
 Makeup:
-  True Color: Core color cosmetics (foundation, lip, eye)
-  Fmg Cashmere: Premium foundation sub-line
-  Glimmerstick: Eye and lip liners
-Color/Seasonal: Varies by campaign
+  True Color         — Core cosmetics: foundation, lip, eye
+  Fmg Cashmere       — Premium foundation sub-line
+  Glimmerstick       — Precision eye and lip liners
+Fragrance:
+  Far Away, Imari, Today, Haiku — core fragrance lines; campaign-exclusive launches frequent
+Fashion & Home:
+  Lower commission tier (25% max) — de-prioritize vs. Beauty/Jewelry for earnings
 
-Business/Compensation:
-  Base commission: 25% on orders $40+ (verify current structure in AvonNow)
-  Volume tiers: up to 50% per campaign for high-volume sellers (2025 structure)
-  NEW 2025: Variable commission model — higher volume = higher % per campaign
-  Leadership earnings, fundraising, and team bonuses available at higher levels
-  IMPORTANT: Encourage every customer to create a named account through your link —
-  guest checkout does NOT credit commission to you. This is the #1 lost-revenue issue.
+BUSINESS / COMPENSATION (verified June 2026 — per-campaign, resets each campaign):
+  Beauty & Jewelry commission tiers (per-campaign order total):
+    $40  – $119   →  20%
+    $120 – $349   →  30%
+    $350 – $1,499 →  40%
+    $1,500 – $6,499 → 45%
+    $6,500+       →  50%
+  Fashion & Home: max 25% regardless of volume
+  CRITICAL: $40 minimum per campaign — below $40 earns ZERO commission
+  CRITICAL: 3 campaigns without an order = automatic account deactivation
+  Additional income: leadership bonuses, fundraising commissions, team bonuses
 
-Income/FTC compliance: Avon does NOT publish an official US Income Disclosure Statement.
-  The FTC (Act §5) treats ANY statement implying a minimum income level as an earnings
-  claim requiring substantiation. Third-party analysis indicates most active Avon reps
-  net $50–150/month after costs. NEVER imply reps will earn more than this typical range.
-  Direct recruits to avon.com for current compensation plan details — never make
-  specific income projections or promises of any kind.
+GUEST CHECKOUT — THE #1 REP COMPLAINT (June 2026):
+  When a customer checks out as a guest through the rep's link, Avon keeps the
+  commission — the rep earns nothing. ALWAYS coach reps to:
+  "Ask every customer to create an Avon account using your link before checkout.
+   Guest checkout loses your commission entirely."
+
+Income/FTC compliance: Avon does NOT publish an official US Income Disclosure Statement
+  as of June 2026. The FTC (Act §5) treats ANY statement implying a minimum income
+  level as an earnings claim requiring substantiation. Independent analysis indicates
+  most active Avon reps net $50–150/month after brochure, bag, and delivery costs.
+  NEVER imply reps will earn more than typical. Direct recruits to avon.com for the
+  current compensation plan — never make income projections of any kind.
+  The $40/campaign floor and 3-campaign deactivation rule mean income is inconsistent
+  for part-time sellers; be honest about this if asked.
 """,
     ids_reference="avon.com for the current compensation plan details",
     product_categories=[
         "skincare", "color cosmetics", "fragrance", "body care", "bug protection",
-        "bath and body", "wellness",
+        "bath and body", "wellness", "haircare",
     ],
-    # Avon-specific patterns from FTC actions and enforcement history against Avon distributors.
-    # Avon has faced state AG actions (NY, CA) and FTC scrutiny on recruitment income claims.
+    # Avon-specific patterns from FTC scrutiny and state AG actions against Avon distributors.
     extra_income_patterns=[
         "avon can change your life",
         "avon will make you rich",
