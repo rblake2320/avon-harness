@@ -1,4 +1,4 @@
-"""MK Consultant Harness API."""
+"""Avon Copilot Harness API."""
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="MK Consultant Harness", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Avon Copilot Harness", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
