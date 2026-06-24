@@ -70,19 +70,23 @@ That's the floor on a genuine push. Leader tier and annual subs are the multipli
 | Tool | What It Does | Monthly Cost |
 |------|-------------|-------------|
 | ChatGPT Plus | Social content, message drafting | $20.00 |
-| Buffer or Later | Social scheduling (content still manual) | $15.00 |
-| Direct Sidekick | Basic income/expense tracking | $10.00 |
+| Buffer (paid) or Later | Social scheduling — Buffer free tier exists but limited | $0–$15 |
+| Direct Sidekick | Inventory + income/expense tracking (annual billing) | $10.00 |
 | AV4 Software | Order history per customer | varies |
-| **Total** | | **$45+/mo** |
+| **Total** | | **$30–45/mo** |
 
 **We cost $9.99/mo and handle the content and customer relationship work.**
 
 We do not replace Direct Sidekick for tax/accounting — we're explicit about that.
-But we replace the $35/mo they spend on content and customer messaging tools that
-don't know anything about Avon.
+But we replace the content and customer messaging spend (ChatGPT + scheduling)
+with something that actually knows Avon's rules, pricing structure, and compliance lines.
 
-The pitch: *"You're spending $35 a month on tools that make you do all the Avon thinking
-yourself. We cost $10 and already know Avon."*
+New threat to watch: **Penny CRM** ($6.99/mo annual) is undercutting Teamzy in the
+CRM space for direct sellers. Avon reps who use it still don't have an Avon-specific
+AI — we're additive to Penny, not competitive with it.
+
+The pitch: *"You're spending $20–35 a month on tools that make you do all the Avon
+thinking yourself. We cost $10 and already know Avon."*
 
 ### What We Do That Nothing Else Does
 
