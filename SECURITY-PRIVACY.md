@@ -67,20 +67,34 @@ disgorgement risk).
 
 ---
 
-## Gaps to close before scaled customer-data handling
+## Implemented in v1.1.0 — the skin-data compliance core
 
-Tracked in ROADMAP.md "Now".
+These were the launch-blocking gaps. They now ship and are covered by tests.
 
-1. **Consent capture** — explicit, logged opt-in before skin analysis (MHMDA + BIPA).
-2. **AI disclosure in chat UI** (California SB 243).
-3. **Raw photo retention enforcement** — process in memory, store derived attributes,
-   discard raw image by default; auto-purge any cache on a published schedule (≤ 3 years).
-4. **Data deletion + export endpoints** — `DELETE /api/customers/{id}` cascading to derived
-   skin data; honor deletion within **45 days** with vendor pass-through.
-5. **Published privacy policy + retention schedule** (BIPA requires a public one).
-6. **DPAs with any cloud LLM/vision vendor**, subcontractor flow-down.
-7. **No-training guarantee** — customer photos never train models without fresh consent.
-8. **Per-tenant data-residency option** (local PanDerm enables the strongest version).
+1. ✅ **Consent capture.** `ConsentRecord` table + `POST /api/consent/skin`. Two subjects:
+   *operator* (rep accepts the data terms — gates the feature) and *customer* (per-customer
+   consent before their photo is analyzed). Each grant stores the SHA-256 of the exact text
+   and the version; mirrored to `AuditLog`. The skin route calls `require_skin_consent()`
+   **before the photo is read** — missing consent → `403` with a machine-readable code
+   (`operator_consent_required` / `customer_consent_required`). Material text changes bump
+   `SKIN_CONSENT_VERSION`, forcing re-consent. Text in `app/consent.py`.
+2. ✅ **AI disclosure on skin output.** Every analyze response + history row carries a
+   persistent `ai_disclosure`. *(Chat-UI SB 243 banner is a separate frontend item below.)*
+3. ✅ **Photo retention enforcement.** Raw bytes `del`-eted after sanitize/encode, sanitized
+   base64 `del`-eted after use, `AuditLog` `skin.analyze` records `photo_discarded=1`. No raw
+   image is ever persisted — only the derived cosmetic result.
+4. ✅ **Deletion + export endpoints.** `DELETE /api/me/skin-data` (optionally `?customer_id=`)
+   purges `SkinAnalysis` + clears derived `Customer` skin fields, returns a **receipt**;
+   `GET /api/me/skin-data/export` returns everything stored for MHMDA access/portability.
+   Revocation: `DELETE /api/consent/skin`.
+
+## Still open (next sprint — only acute with paying enterprise tenants)
+
+5. **Chat-UI AI disclosure banner** (California SB 243) — frontend "you're chatting with AI".
+6. **Published privacy policy + retention schedule** (BIPA requires a public one).
+7. **DPAs with any cloud LLM/vision vendor**, subcontractor flow-down.
+8. **No-training guarantee** — customer photos never train models without fresh consent.
+9. **Per-tenant data-residency option** (local PanDerm enables the strongest version).
 
 ---
 

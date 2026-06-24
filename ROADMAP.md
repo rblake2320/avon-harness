@@ -16,8 +16,11 @@ acquisition, Leader-tier leverage) and by `ConsultantProfile` analytics once rep
       per-rep campaign-total input. No other tool does this.
 - [ ] **Billing & subscription tiers.** Stripe — Solo / Leader / Studio. Annual default.
       Bundle discount for reps who also run MK Copilot.
-- [ ] **Data deletion / export endpoints** + photo retention enforcement
-      (see SECURITY-PRIVACY.md). Required before scaled customer-data handling.
+- [x] **Consent capture + deletion/export + photo retention.** Shipped v1.1.0 —
+      `ConsentRecord` + `/api/consent/skin` (operator + per-customer gate before photo read),
+      `DELETE /api/me/skin-data` (purge + receipt), `GET /api/me/skin-data/export`, and
+      explicit photo-buffer drop with `AuditLog photo_discarded=1`. See SECURITY-PRIVACY.md.
+- [ ] **Chat-UI AI disclosure banner** (California SB 243) — frontend "you're talking to AI".
 - [ ] **Usage-metering dashboard.** Token cost per rep/team, visible to tenant admins.
 - [ ] **Redis rate limiting.** Swap in-process store (`ratelimit.py`) for multi-replica.
 - [ ] **Mobile device test.** Expo EAS, real iOS + Android — camera skin flow never run on device.

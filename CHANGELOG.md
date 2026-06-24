@@ -19,6 +19,31 @@ See `ROADMAP.md`.
 
 ---
 
+## [1.1.0] — 2026-06-24
+
+Customer skin-data privacy core (shared with MK Copilot 1.2.0). Closes the launch-blocking
+gaps from `SECURITY-PRIVACY.md`, driven by Washington's My Health My Data Act private right
+of action over derived skin attributes.
+
+### Added
+- **Consent capture** — `ConsentRecord` model + `app/consent.py`; `POST/GET/DELETE
+  /api/consent/skin` for operator and per-customer consent (versioned, SHA-256 integrity
+  hash, mirrored to `AuditLog`).
+- **Consent gate on skin analysis** — `require_skin_consent()` blocks before the photo is
+  read; `403` with `operator_consent_required` / `customer_consent_required`.
+- **AI disclosure** — persistent `ai_disclosure` on every skin response + history row.
+- **Subject-rights endpoints** — `GET /api/me/skin-data/export` (access/portability) and
+  `DELETE /api/me/skin-data` (purge + deletion receipt; optional `?customer_id=`).
+
+### Changed
+- **Photo retention made explicit** — raw + sanitized image buffers `del`-eted after use;
+  `AuditLog` `skin.analyze` records `photo_discarded=1`. No raw image ever persisted.
+
+### Tests
+- 46 → 52. New: consent gate, status/grant/revoke flow, export, deletion, isolation.
+
+---
+
 ## [1.0.0] — 2026-06-24
 
 Initial Avon Copilot release. Forks the proven MK Copilot 1.1.0 backend (brand-agnostic

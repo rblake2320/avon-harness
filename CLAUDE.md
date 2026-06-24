@@ -90,7 +90,7 @@ Same as MK Harness, plus:
 
 ## Testing
 
-Run `python -m pytest -v` — all 46 tests must pass.
+Run `python -m pytest -v` — all 52 tests must pass.
 The test suite uses `avon` brand config for brand-related tests (update conftest
 `DEFAULT_BRAND` env var if needed for brand-specific test cases).
 
