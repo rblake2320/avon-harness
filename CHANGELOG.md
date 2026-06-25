@@ -19,6 +19,27 @@ See `ROADMAP.md`.
 
 ---
 
+## [1.3.0] — 2026-06-25
+
+Web client — first real, demo-able pass (shared with MK Copilot 1.4.0). The React/Vite
+app now compiles and builds. Brand behavior stays server-side; the web shell uses the
+neutral "Consultant Studio" platform brand.
+
+### Added
+- **SDK extended** to match the backend: `signup({ref})`, consent, billing, skin-data
+  export/delete, suggestions, structured `ApiError` (status + `detail.code`).
+- **SB 243 AI disclosure** — once-per-session modal, persistent strip, per-output `AI`
+  badge; server `ai_disclosure` rendered in skin results.
+- **Billing view** — annual-first plans, Stripe Checkout hand-off, portal link, shareable
+  referral link with earned-credit display.
+- **Referral capture** (`?ref=`), **consent-gated skin analysis** (403-code-driven modal),
+  **Power Hour** daily suggestions with one-click AI follow-up. Mobile-responsive.
+
+### Verified
+- `tsc -b --noEmit` clean; `vite build` succeeds.
+
+---
+
 ## [1.2.0] — 2026-06-24
 
 Revenue infrastructure (shared with MK Copilot 1.3.0). Stripe billing, annual-first,

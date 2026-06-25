@@ -22,7 +22,9 @@ acquisition, Leader-tier leverage) and by `ConsultantProfile` analytics once rep
       `ConsentRecord` + `/api/consent/skin` (operator + per-customer gate before photo read),
       `DELETE /api/me/skin-data` (purge + receipt), `GET /api/me/skin-data/export`, and
       explicit photo-buffer drop with `AuditLog photo_discarded=1`. See SECURITY-PRIVACY.md.
-- [ ] **Chat-UI AI disclosure banner** (California SB 243) — frontend "you're talking to AI".
+- [x] **Chat-UI AI disclosure banner** (California SB 243) + **web client first pass**.
+      Shipped v1.3.0 — once-per-session modal + persistent strip + per-output AI badge;
+      Billing view, consent-gated Skin, Power Hour, referral capture. tsc + vite build clean.
 - [ ] **Usage-metering dashboard.** Token cost per rep/team, visible to tenant admins.
 - [ ] **Redis rate limiting.** Swap in-process store (`ratelimit.py`) for multi-replica.
 - [ ] **Mobile device test.** Expo EAS, real iOS + Android — camera skin flow never run on device.

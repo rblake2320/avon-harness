@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Avon Copilot Harness", version="1.2.0", lifespan=lifespan)
+app = FastAPI(title="Avon Copilot Harness", version="1.3.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
