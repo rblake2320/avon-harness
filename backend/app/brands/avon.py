@@ -90,6 +90,14 @@ Income/FTC compliance: Avon does NOT publish an official US Income Disclosure St
   for part-time sellers; be honest about this if asked.
 """,
     ids_reference="avon.com for the current compensation plan details",
+    avg_order_value_usd=55.0,
+    follow_up_coaching=(
+        " AVON GUEST CHECKOUT — include naturally in every follow-up: coach the customer "
+        "to create an Avon account through the rep's personal link before placing an order. "
+        "Guest checkout means the rep earns zero commission. Weave this in as helpful advice "
+        "for the customer ('logging in gets you order history, easier returns, exclusive member "
+        "pricing') — never as a complaint about Avon's checkout."
+    ),
     product_categories=[
         "skincare", "color cosmetics", "fragrance", "body care", "bug protection",
         "bath and body", "wellness", "haircare",
