@@ -16,6 +16,10 @@ os.environ["STRIPE_WEBHOOK_SECRET"] = "whsec_test_dummy"
 os.environ["STRIPE_PRICES"] = (
     '{"solo:month":"price_solo_m","solo:year":"price_solo_y","leader:year":"price_leader_y"}')
 os.environ["BILLING_TRIAL_DAYS"] = "90"
+# Isolate provider keys: real keys in the OS environment must not leak into tests
+# and cause the router to attempt live provider calls (respx.mock would raise).
+for _k in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY"):
+    os.environ.pop(_k, None)
 
 from app.config import get_settings  # noqa: E402
 get_settings.cache_clear()

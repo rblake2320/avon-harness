@@ -95,13 +95,15 @@ via the app settings, which immediately blocks further processing.</p>
   <li>All data in transit is encrypted via TLS.</li>
   <li>API keys are encrypted at rest with AES-256-GCM; each key is bound to its
       tenant/user scope by authenticated encryption (AAD).</li>
-  <li>Passwords are stored as bcrypt hashes (cost factor 12).</li>
+  <li>Passwords are stored as salted argon2id hashes (memory-hard, industry
+      best practice per OWASP guidance).</li>
   <li>Login brute-force protection: 5 failures per 15 minutes triggers a lockout.</li>
 </ul>
 
 <h2>8. Cookies and tracking</h2>
-<p>We do not use advertising cookies or third-party tracking pixels. The web app uses a
-single session cookie for authentication (JWT, HttpOnly).</p>
+<p>We do not use advertising cookies or third-party tracking pixels. Authentication uses
+short-lived bearer tokens (JWT) sent in the Authorization header; changing your password
+or deleting your account immediately revokes all previously issued tokens.</p>
 
 <h2>9. Changes to this policy</h2>
 <p>We will notify you of material changes via in-app notice at least 30 days before the
@@ -124,7 +126,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Avon Copilot Harness", version="1.5.0", lifespan=lifespan)
+app = FastAPI(title="Avon Copilot Harness", version="1.5.1", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

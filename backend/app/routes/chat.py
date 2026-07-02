@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from ..config import get_settings
 from ..db import get_db
 from ..entitlements import require_active_subscription
 from ..models import ConsultantProfile, Conversation, Message, Tenant, User
@@ -41,7 +42,7 @@ def _own_conversation(db: Session, user: User, cid: str) -> Conversation:
 
 def _brand_skills(user: User, db: Session) -> dict:
     tenant = db.get(Tenant, user.tenant_id)
-    brand = tenant.brand if tenant else "mary_kay"
+    brand = tenant.brand if tenant else get_settings().default_brand
     return get_skills(brand)
 
 
@@ -179,7 +180,7 @@ async def chat_stream(body: ChatIn, user: User = Depends(check_rate),
                 full = _PROMPT_LEAK_REPLY
             # 2. FTC income claim: block persistence and warn; streamed deltas already sent.
             tenant = db.get(Tenant, user.tenant_id)
-            brand_name = tenant.brand if tenant else "mary_kay"
+            brand_name = tenant.brand if tenant else get_settings().default_brand
             claim_found, claim_phrase = response_has_income_claim(full, brand_name)
             if claim_found:
                 _bump_compliance_flag(db, user)

@@ -3,7 +3,10 @@
 Falls back to None when REDIS_URL is not set or Redis is unreachable.
 Call get_redis() on each use; the first call initialises the connection pool.
 """
+import logging
 import threading
+
+_log = logging.getLogger(__name__)
 
 _client = None
 _init_lock = threading.Lock()
@@ -28,7 +31,13 @@ def get_redis():
             client = _redis.from_url(url, socket_connect_timeout=1, decode_responses=True)
             client.ping()
             _client = client
-        except Exception:
+        except Exception as e:
+            # REDIS_URL was explicitly set — a silent fall-through would leave
+            # rate limiting and brute-force lockout per-process in a multi-replica
+            # deployment. Keep the fallback (availability) but say so loudly.
+            _log.error("REDIS_URL is set but Redis is unusable (%s: %s). "
+                       "Falling back to in-process limits — NOT multi-replica safe.",
+                       type(e).__name__, e)
             _client = None
     return _client
 

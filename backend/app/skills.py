@@ -155,13 +155,21 @@ def response_has_income_claim(
 # System-prompt leak detection (brand-agnostic fingerprints)
 # ---------------------------------------------------------------------------
 _PROMPT_FINGERPRINTS = [
+    # Brand-agnostic scaffolding
     "verified price facts below",
+    "operating guidelines but cannot share",
+    "direct recruits to the income disclosure statement",
+    # Mary Kay prompt scaffolding
     "verified mary kay prices",
     "mk price facts",
-    "operating guidelines but cannot share",
     "catalog 2026-01-03",
     "star consultant requires $1,800 wholesale",
-    "direct recruits to the income disclosure statement",
+    # Avon prompt scaffolding (distinctive instruction text a model should never
+    # reproduce verbatim; chosen to avoid false positives on legitimate coaching)
+    "avon pricing — critical rule",
+    "education only — no prices",
+    "business / compensation (verified june 2026",
+    "avon guest checkout — include naturally in every follow-up",
 ]
 
 _PROMPT_LEAK_REPLY = (
@@ -169,11 +177,26 @@ _PROMPT_LEAK_REPLY = (
     "How can I help you with your business today?"
 )
 
+_DASHES = str.maketrans({"\u2014": "-", "\u2013": "-", "\u2212": "-"})  # em/en/minus → hyphen
+
+
+def _normalize_for_match(text: str) -> str:
+    """Lowercase, unify dash variants, collapse all whitespace runs to one space.
+
+    Models leak prompts with line-wraps and dash substitutions; naive substring
+    matching misses 'AVON PRICING -\\nCRITICAL RULE'. Both the fingerprints and
+    the candidate text pass through this, so the two sides can never drift.
+    """
+    return " ".join(text.lower().translate(_DASHES).split())
+
+
+_NORMALIZED_FINGERPRINTS = [_normalize_for_match(fp) for fp in _PROMPT_FINGERPRINTS]
+
 
 def response_leaks_system_prompt(text: str) -> bool:
     """Return True if the response reproduces distinctive system prompt text."""
-    low = text.lower()
-    return any(fp in low for fp in _PROMPT_FINGERPRINTS)
+    low = _normalize_for_match(text)
+    return any(fp in low for fp in _NORMALIZED_FINGERPRINTS)
 
 
 # ---------------------------------------------------------------------------

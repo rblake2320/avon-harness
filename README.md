@@ -1,6 +1,6 @@
 # Consultant Studio — Model-Agnostic AI Harness for Beauty Consultants
 
-[![CI](https://github.com/rblake2320/mk-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/rblake2320/mk-harness/actions/workflows/ci.yml)
+[![CI](https://github.com/rblake2320/avon-harness/actions/workflows/ci.yml/badge.svg)](https://github.com/rblake2320/avon-harness/actions/workflows/ci.yml)
 
 Push-button AI for independent beauty consultants: sales coaching, party
 planning, customer follow-ups, social content, and photo-based **cosmetic**
@@ -11,10 +11,10 @@ required.
 ## What's in the box
 
 ```
-mk-harness/
+avon-harness/
 ├── backend/          FastAPI · Postgres · multi-tenant · JWT auth
 │   ├── app/providers/   The harness core: 4 adapters + router + failover
-│   └── tests/           59 tests (auth, crypto, isolation, adapters, e2e)
+│   └── tests/           92 tests (auth, crypto, isolation, adapters, e2e, hardening)
 ├── packages/sdk/     Shared TypeScript SDK (web + mobile)
 ├── web/              React + Vite web client (dark "vanity mirror" UI)
 ├── mobile/           Expo React Native client (camera skin analysis)
@@ -60,7 +60,7 @@ after being saved.
 ## Run it
 
 ```bash
-cd mk-harness
+cd avon-harness
 cat > .env << 'ENV'
 POSTGRES_PASSWORD=$(openssl rand -hex 24)
 JWT_SECRET=$(openssl rand -hex 48)
@@ -96,7 +96,7 @@ npx expo start
 ## Tests
 
 ```bash
-cd backend && python -m pytest -v    # 59 tests
+cd backend && python -m pytest -v    # 92 tests
 ```
 
 Provider adapters are tested against each vendor's documented wire format

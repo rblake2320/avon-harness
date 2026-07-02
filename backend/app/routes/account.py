@@ -201,12 +201,14 @@ def delete_account(body: DeleteAccountIn, user: User = Depends(get_current_user)
     for cr in db.scalars(select(ConsentRecord).where(ConsentRecord.user_id == uid)).all():
         cr.revoked_at = cr.revoked_at or datetime.now(timezone.utc)
 
-    # Anonymise the user record — invalidate sessions by clearing password hash
+    # Anonymise the user record — sessions invalidated three ways: is_active=False,
+    # token_version bump (revokes ALL outstanding JWTs immediately), cleared hash.
     user.email = f"deleted_{uid}@deleted"
     user.display_name = ""
     user.password_hash = ""
     user.referral_code = None
     user.is_active = False
+    user.token_version = (user.token_version or 0) + 1
 
     # Audit log entry (anonymised — user_id retained as a reference only)
     db.add(AuditLog(tenant_id=tid, user_id=uid,

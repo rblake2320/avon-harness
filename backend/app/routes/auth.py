@@ -8,12 +8,14 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from ..brands.registry import BRANDS
 from ..cache import get_redis
+from ..config import get_settings
 from ..db import get_db
 from ..models import AuditLog, Tenant, User
 from ..security import (
-    decode_token, get_current_user, hash_password, make_access_token,
-    make_refresh_token, require_admin, verify_password,
+    check_token_version, decode_token, get_current_user, hash_password,
+    make_access_token, make_refresh_token, require_admin, verify_password,
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -120,7 +122,13 @@ def signup(body: SignupIn, db: Session = Depends(get_db)):
         referrer = db.scalar(select(User).where(User.referral_code == body.ref.upper()))
         if referrer:
             referred_by = referrer.id
-    tenant = Tenant(name=body.org_name, key_policy=body.key_policy)
+    # Brand comes from server config (DEFAULT_BRAND) — this is the Avon harness, so
+    # every new tenant must be created as the configured brand, never the model-column
+    # default. Validated against the registry so a config typo fails loudly at signup.
+    brand = get_settings().default_brand
+    if brand not in BRANDS:
+        raise HTTPException(500, f"Server misconfigured: unknown DEFAULT_BRAND '{brand}'")
+    tenant = Tenant(name=body.org_name, key_policy=body.key_policy, brand=brand)
     db.add(tenant)
     db.flush()
     user = User(tenant_id=tenant.id, email=body.email.lower(),
@@ -157,6 +165,7 @@ def refresh(body: RefreshIn, db: Session = Depends(get_db)):
     user = db.get(User, payload["sub"])
     if not user or not user.is_active:
         raise HTTPException(401, "User not found or deactivated")
+    check_token_version(payload, user)
     return _tokens(user)
 
 
@@ -204,7 +213,13 @@ def change_password(body: ChangePasswordIn, user: User = Depends(get_current_use
     if not verify_password(body.current_password, user.password_hash):
         raise HTTPException(401, "Current password is incorrect")
     user.password_hash = hash_password(body.new_password)
+    # Revoke every outstanding access + refresh token (credential-theft recovery):
+    # bumping token_version invalidates all previously minted JWTs immediately.
+    user.token_version = (user.token_version or 0) + 1
     db.add(AuditLog(tenant_id=user.tenant_id, user_id=user.id,
-                    action="auth.change_password", detail=""))
+                    action="auth.change_password", detail="tokens_revoked=1"))
     db.commit()
-    return {"ok": True}
+    # Fresh pair minted at the new version — the current session continues seamlessly.
+    fresh = _tokens(user)
+    return {"ok": True, "access_token": fresh.access_token,
+            "refresh_token": fresh.refresh_token}

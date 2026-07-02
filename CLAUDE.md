@@ -99,7 +99,7 @@ via `STRIPE_PRICES`, point a webhook at `POST /api/billing/webhook`. Secrets in 
 
 ## Testing
 
-Run `python -m pytest -v` — all 59 tests must pass.
+Run `python -m pytest -v` — all 92 tests must pass.
 The test suite uses `avon` brand config for brand-related tests (update conftest
 `DEFAULT_BRAND` env var if needed for brand-specific test cases).
 

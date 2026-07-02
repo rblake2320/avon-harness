@@ -7,6 +7,7 @@ from sqlalchemy import asc, select
 from sqlalchemy.orm import Session
 
 from ..brands.registry import get_brand
+from ..config import get_settings
 from ..db import get_db
 from ..entitlements import require_active_subscription
 from ..models import Customer, Tenant, User
@@ -64,7 +65,7 @@ def daily_suggestions(user: User = Depends(get_current_user), db: Session = Depe
     not just a name list. Framed as product/order value, not an earnings projection.
     """
     tenant = db.get(Tenant, user.tenant_id)
-    brand_name = tenant.brand if tenant else "mary_kay"
+    brand_name = tenant.brand if tenant else get_settings().default_brand
     brand = get_brand(brand_name)
     avg_order = brand.avg_order_value_usd
 
@@ -173,7 +174,7 @@ async def generate_follow_up(cid: str, body: FollowUpIn, user: User = Depends(ch
                f"{skin_ctx}\nGoal: {body.goal}\nConsultant name: {user.display_name}")
 
     tenant = db.get(Tenant, user.tenant_id)
-    brand_name = tenant.brand if tenant else "mary_kay"
+    brand_name = tenant.brand if tenant else get_settings().default_brand
     skills = get_skills(brand_name)
 
     req = ChatRequest(messages=[ChatMessage(role="user", content=context)],

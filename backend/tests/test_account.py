@@ -36,10 +36,14 @@ class TestChangePassword:
             "new_password": "newPasswordABC$99",
         }, headers=hdrs)
         assert r.status_code == 200
-        assert r.json()["ok"] is True
+        body = r.json()
+        assert body["ok"] is True
+        # Password change revokes ALL prior tokens and returns a fresh pair.
+        assert body["access_token"] and body["refresh_token"]
+        fresh_hdrs = {"Authorization": f"Bearer {body['access_token']}"}
 
         # Can login with new password
-        me_email = client.get("/api/auth/me", headers=hdrs).json()["email"]
+        me_email = client.get("/api/auth/me", headers=fresh_hdrs).json()["email"]
         login_r = client.post("/api/auth/login", json={
             "email": me_email, "password": "newPasswordABC$99"})
         assert login_r.status_code == 200

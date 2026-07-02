@@ -20,6 +20,12 @@ def now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def _default_brand() -> str:
+    """Column-level default for Tenant.brand — reads server config lazily."""
+    from .config import get_settings
+    return get_settings().default_brand
+
+
 class Base(DeclarativeBase):
     pass
 
@@ -31,7 +37,9 @@ class Tenant(Base):
     # Key policy: "central" (company keys only), "byo" (consultant keys only), "both"
     key_policy: Mapped[str] = mapped_column(String(10), default="both")
     # Brand config identifier — drives system prompts and product catalog.
-    brand: Mapped[str] = mapped_column(String(40), default="mary_kay")
+    # Default follows server config (DEFAULT_BRAND) so this fork can never silently
+    # mint tenants under another brand; signup also sets it explicitly.
+    brand: Mapped[str] = mapped_column(String(40), default=_default_brand)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
     users: Mapped[list["User"]] = relationship(back_populates="tenant")
@@ -47,6 +55,10 @@ class User(Base):
     display_name: Mapped[str] = mapped_column(String(120), default="")
     role: Mapped[str] = mapped_column(String(20), default="consultant")  # admin | consultant
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # Monotonic token generation. Embedded in every JWT as "tv"; bumping it revokes
+    # all outstanding access + refresh tokens (password change, account deletion).
+    # Migration for existing DBs: ALTER TABLE users ADD COLUMN token_version INTEGER NOT NULL DEFAULT 0;
+    token_version: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     # Referral program: every user gets a shareable code; referred_by points at the referrer.
     referral_code: Mapped[str | None] = mapped_column(String(16), unique=True, nullable=True, index=True)
     referred_by: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True, index=True)
